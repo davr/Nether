@@ -108,7 +108,7 @@ public class NetherPlayerListener extends PlayerListener {
 			}
 			
 			// Go!
-			Location spawn = portal.getSpawn();
+			Location spawn = portal.getSpawn(event.getPlayer().getLocation().getYaw());
 			nether.loadChunk(spawn.getBlock().getChunk());
 			event.getPlayer().teleportTo(spawn);
 			event.setTo(spawn);
@@ -140,7 +140,7 @@ public class NetherPlayerListener extends PlayerListener {
 			}
 			
 			// Go!
-			Location spawn = portal.getSpawn();
+			Location spawn = portal.getSpawn(event.getPlayer().getLocation().getYaw());
 			normal.loadChunk(spawn.getBlock().getChunk());
 			event.getPlayer().teleportTo(spawn);
 			event.setTo(spawn);

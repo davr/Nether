@@ -23,18 +23,27 @@ public class NetherPortal {
 	public void setBlock(Block b) {
 		block = b;
 	}
-	
+
 	// Return a random spawnable location
-	public Location getSpawn() {
+	public Location getSpawn(float yaw) {
+		// correct yaw to range of 360 degrees
+		yaw = yaw % 360;
+		if (yaw < 0) yaw += 360.0F;
+		double offset = 1.5;  // default for west(y+)/south(x+) offset
+
 		if (block.getWorld().getBlockAt(block.getX() + 1, block.getY(), block.getZ()).getType().equals(Material.PORTAL) ||
 				block.getWorld().getBlockAt(block.getX() - 1, block.getY(), block.getZ()).getType().equals(Material.PORTAL)) {
 			// portal is in X direction
+			if (yaw > 90 && yaw <= 270)  // (yaw 180ish, facing east)
+				offset = -0.5;  // offset east
 			return new Location(block.getWorld(), block.getX() + 0.5,
-					block.getY(), block.getZ() + 1.5 - 2 * Math.round(Math.random()));
+					block.getY(), block.getZ() + offset, yaw, 0);
 		} else {
 			// portal is in Z direction
-			return new Location(block.getWorld(), block.getX() + 1.5 - 2 * Math.round(Math.random()),
-					block.getY(), block.getZ() + 0.5);
+			if (yaw > 0 && yaw <= 180)  // (yaw 90ish, facing north)
+				offset = -0.5;  // offset north
+			return new Location(block.getWorld(), block.getX() + offset,
+					block.getY(), block.getZ() + 0.5, yaw, 0);
 		}
 	}
 
