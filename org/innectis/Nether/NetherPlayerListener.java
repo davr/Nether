@@ -102,7 +102,7 @@ public class NetherPlayerListener extends PlayerListener {
 			
 			// Try to find a portal near where the player should land
 			Block dest = nether.getBlockAt(((locX+signAdjX) / NETHER_COMPRESSION)-signAdjX, locZ, ((locY + signAdjY) / NETHER_COMPRESSION)-signAdjY);
-			NetherPortal portal = NetherPortal.findPortal(dest, 1, event.getPlayer().getName());
+			NetherPortal portal = NetherPortal.findPortal(dest, 2, event.getPlayer().getName());
 			if (portal == null) {
 				portal = NetherPortal.createPortal(dest, orientX);
 			}
@@ -134,7 +134,7 @@ public class NetherPlayerListener extends PlayerListener {
 
 			// Try to find a portal near where the player should land
 			Block dest = normal.getBlockAt(locX * NETHER_COMPRESSION, locZ, locY * NETHER_COMPRESSION);
-			NetherPortal portal = NetherPortal.findPortal(dest, NETHER_COMPRESSION, event.getPlayer().getName());
+			NetherPortal portal = NetherPortal.findPortal(dest, NETHER_COMPRESSION*2, event.getPlayer().getName());
 			if (portal == null) {
 				portal = NetherPortal.createPortal(dest, orientX);
 			}
