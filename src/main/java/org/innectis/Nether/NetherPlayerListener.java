@@ -165,13 +165,27 @@ public class NetherPlayerListener extends PlayerListener {
                     worldName = dataOnSign(l);
                     if (worldName != null) break;
                 }
-            }
+            } else {
+				System.out.println("NETHER_PLUGIN: couldn't find the columns!");
+			}
         } else {
-
+            Location[] cols = locateYColumns(loc);
+            if (cols != null) {
+                //got the two columns, so crawl up them and find a sign
+                for (Location l : cols) {
+                    worldName = dataOnSign(l);
+                    if (worldName != null) break;
+                }
+            } else {
+				System.out.println("NETHER_PLUGIN: couldn't find the columns!");
+			}
         }
         if (worldName == null) {
-            main.getConfiguration().getString("default-normal-world");
-        }
+            worldName = main.getConfiguration().getString("default-normal-world");
+            System.out.println("NETHER_PLUGIN: picking default normal world: "+worldName);
+        } else {
+            System.out.println("NETHER_PLUGIN: picking world: "+worldName);
+		}
         return worldName;
     }
 
@@ -182,39 +196,43 @@ public class NetherPlayerListener extends PlayerListener {
      * @return
      */
     private String dataOnSign(Location l) {
+		String log = "";
         String output = null;
         Sign s = null;
         World w = l.getWorld();
+		if(l==null) {
+			System.out.println("NETHER_PLUGIN: checking null loc :(");
+			return null;
+		}
+
 
         //loop up the thing, and while we don't have a sign
-        for (int y = 0; y < 3 && s == null; y++) {
-            for (int x = -1; x < 1; x += 2) {
-                Block b = w.getBlockAt(l.getBlockX() + x, l.getBlockY(), l.getBlockZ());
-                if (b.getType() == Material.SIGN) {
-                    //Holy crap found a sign!
-                    s = (Sign) b.getState();
-                    break;
-                }
-            }
-            if (s == null) {
-                for (int z = -1; z < 1; z += 2) {
-                    Block b = w.getBlockAt(l.getBlockX(), l.getBlockY(), l.getBlockZ() + z);
-                    if (b.getType() == Material.SIGN) {
-                        //Holy crap found a sign!
-                        s = (Sign) b.getState();
-                        break;
-                    }
-                }
-            }
+        for (int y = 3; y <= 3; y++) {
+            for (int x = -2; x <= 2; x ++) {
+				for(int z = -2; z <= 2; z++) {
+					Block b = w.getBlockAt(l.getBlockX() + x, l.getBlockY()+y, l.getBlockZ()+z);
+					if (b.getType() == Material.WALL_SIGN) {
+						//Holy crap found a sign!
+						s = (Sign) b.getState();
+						StringBuilder sb = new StringBuilder();
+						for (String line : s.getLines()) {
+							sb.append(line);
+						}
+						output = sb.toString();
+						System.out.println("NETHER_PLUGIN: found sign: "+output);
+						World test = main.getServer().getWorld(output);
+						if(test == null) {
+							System.out.println("NETHER_PLUGIN: false alarm...");
+							output = null;
+							s = null;
+						}
+						else
+							return output;
+					}
+				}
+			}
         }
-        if (s != null) {
-            StringBuilder sb = new StringBuilder();
-            for (String line : s.getLines()) {
-                sb.append(line);
-            }
-            output = sb.toString();
-        }
-        return output;
+        return null;
     }
 
     private Location[] locateXColumns(Location l) {
