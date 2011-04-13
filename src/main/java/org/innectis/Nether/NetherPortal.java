@@ -49,7 +49,7 @@ public class NetherPortal {
 
 	// Output a debug representation of the search for a portal block
 	public static void logSearch(char[][] a, int searchDistance, String playerName) {
-		if (DEBUG) {
+		/*if (DEBUG) {
 			for (int y = searchDistance - 1; y >= 0; --y) {
 				String line = "";
 				for (int x = 0; x < searchDistance; ++x) {
@@ -60,7 +60,7 @@ public class NetherPortal {
 				}
 				System.out.println("NETHER_PLUGIN: " + playerName + ": " + line);
 			}
-		}
+		}*/
 	}
 	
 	// ==============================
