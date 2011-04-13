@@ -136,7 +136,7 @@ public class NetherPlayerListener extends PlayerListener {
 			// Go!
 			Location spawn = portal.getSpawn(event.getPlayer().getLocation().getYaw());
             normalWorld.loadChunk(spawn.getBlock().getChunk());
-			event.getPlayer().teleportTo(spawn);
+			event.getPlayer().teleport(spawn);
 			event.setTo(spawn);
 		}
 	}
